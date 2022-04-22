@@ -1,14 +1,12 @@
-const router = require('express').Router();
-const User = require('../model/users')
-const bcrypt = require('bcrypt')
-
-
+const router = require("express").Router();
+const { registerEvent, unsubscribingAccount } = require("../controller/users");
 
 //register
-// router.post('/register', )
+router.post("/register", registerEvent);
+router.post("/unsubscribe/:id", unsubscribingAccount);
 //login
 // router.post('/login' ,)
 
 // get friends
 
-module.exports=  router
+module.exports = router;

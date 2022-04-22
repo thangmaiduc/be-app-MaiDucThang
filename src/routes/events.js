@@ -1,10 +1,11 @@
 const router = require('express').Router();
-const bcrypt = require('bcrypt')
+const {createEvent,getListOfEvent} =require('../controller/events')
 
 
 
 //register
-// router.post('/register', )
+router.post('/', createEvent)
+router.get('/:id', getListOfEvent)
 //login
 // router.post('/login' ,)
 

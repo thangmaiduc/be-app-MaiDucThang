@@ -4,6 +4,7 @@ const dotenv =require('dotenv')
 const mongoose = require('mongoose');
 const cors = require('cors')
 const userRouter = require('./routes/users')
+const eventRouter = require('./routes/events')
 const authRouter = require('./routes/auth')
 
 
@@ -19,6 +20,7 @@ app.use(cors())
 app.use(express.json())
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
+app.use('/api/events', eventRouter);
     
 
 
