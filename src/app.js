@@ -14,7 +14,7 @@ const app = express();
 // view engine setup
 
 dotenv.config()
-app.use(logger('common'))
+app.use(logger('dev'))
 app.use(cors())
 app.use(express.json())
 app.use('/api/auth', authRouter);
