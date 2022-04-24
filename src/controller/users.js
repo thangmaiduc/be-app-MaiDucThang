@@ -13,15 +13,31 @@ const registerEvent = async (req, res, next) => {
       error.data = errors.array();
       throw error;
     }
+    
     let user;
     const { nameEvent, firstName, lastName, email, workLocation, hobbies } =
       req.body;
+      const event = await Event.findOne({ nameEvent });
+      let users = await User.find({email});
+      let isExsist = users.some( user=>{
+       return  event.participants.includes(user._id.toString())
+      })
+      if(isExsist){
+        const err = new Error('Dữ liệu nhập vào không hợp lệ');
+        let param = {
+          msg: 'Email naỳ đăng kí vào event rồi ', 
+          param : 'email'
+        }
+        err.data = [ param]
+        err.statusCode = 422;
+        throw err;
+      }  
     if (nameEvent === "Event A") {
       user = new User({ firstName, lastName, email, workLocation });
     } else if (nameEvent === "Event B") {
       user = new User({ firstName, lastName, email, hobbies });
     }
-    const event = await Event.findOne({ nameEvent });
+    
     await user.save();
 
     await event.updateOne({

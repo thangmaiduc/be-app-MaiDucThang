@@ -20,19 +20,30 @@ const createEvent = async (req, res, next) => {
 const getListOfEvent = async (req, res, next) => {
   try {
     const { id } = req.params;
-    let event = await Event.findById(id);
+    const page = req.query.page *1||1
+    const limit = req.query.limit *1||5
+    const skip = limit * (page -1)
+
+    let event = await Event.findById(id, {participants:1}).populate({
+       path: 'members',
+       options:{
+           limit,
+           skip
+       }
+    });
     if (!event) {
       const error = new Error("Không tìm thấy event nào cả");
       error.statusCode = 404;
       throw error;
     }
-    let users = await Promise.all(
-      event.participants.map((userId) => {
-        return User.findById(userId, {createdAt:0, updatedAt:0, password:0});
-      })
-    );
 
-    res.status(200).json(users);
+    // let users = await Promise.all(
+    //   event.participants.map((userId) => {
+    //     return User.findById(userId, {createdAt:0, updatedAt:0, password:0}).skip(skip).limit(limit);
+    //   })
+    // );
+
+    res.status(200).json(event);
   } catch (error) {
     next(error);
   }

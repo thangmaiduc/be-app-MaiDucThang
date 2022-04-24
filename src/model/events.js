@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const userSchema = mongoose.Schema({
+const Schema = mongoose.Schema({
     nameEvent:{
         type: String,
         require: true,
@@ -14,7 +14,14 @@ const userSchema = mongoose.Schema({
    
     
 },{
-    timestamps: true
+    timestamps: true,
+    toJSON: { virtuals: true},
+    toObject: { virtuals: true}
+})
+Schema.virtual('members', {
+    ref: 'User',
+    localField: 'participants',
+    foreignField: '_id'
 })
 
-module.exports = mongoose.model('Event', userSchema)
+module.exports = mongoose.model('Event', Schema)
