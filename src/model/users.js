@@ -24,6 +24,10 @@ const userSchema = mongoose.Schema({
     workLocation : {
         type : String
         
+    },
+    role:{
+        type: String,
+        default:''
     }
     
 },{
