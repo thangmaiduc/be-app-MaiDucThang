@@ -1,17 +1,17 @@
 const jwt = require("jsonwebtoken");
 const User = require("../model/users");
-
+var { validationResult } = require("express-validator");
 const login = async (req, res, next) => {
   const { email, password } = req.body;
   try {
-    // const errors = validationResult(req);
+    const errors = validationResult(req);
 
-    // if (!errors.isEmpty()) {
-    //   const error = new Error("Dữ liệu nhập vào không hợp lệ");
-    //   error.statusCode = 422;
-    //   error.data = errors.array();
-    //   throw error;
-    // }
+    if (!errors.isEmpty()) {
+      const error = new Error("Dữ liệu nhập vào không hợp lệ");
+      error.statusCode = 422;
+      error.data = errors.array();
+      throw error;
+    }
     const user = await User.findOne({ email, password });
     if (!user) {
       const error = new Error("Email hoặc mật khẩu không chính xác");

@@ -1,8 +1,18 @@
 const User = require("../model/users");
 const Event = require("../model/events");
+var { validationResult } = require("express-validator");
+
 
 const registerEvent = async (req, res, next) => {
   try {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      const error = new Error("Dữ liệu nhập vào không hợp lệ");
+      error.statusCode = 422;
+      error.data = errors.array();
+      throw error;
+    }
     let user;
     const { nameEvent, firstName, lastName, email, workLocation, hobbies } =
       req.body;
@@ -76,15 +86,12 @@ const getEventRegisted = async (req, res, next) => {
   try {
     const { email } = req.body;
     let users = await User.find({ email });
-    // usersId = users.map((user) => user._id.toString());
-    // const events = await Event.find({ participants: { $in: usersId } });
-    // console.log(events);
+    
     users= await
        Promise.all( users.map(async user=>{
             id = user._id.toString()
             events =  await Event.find({participants :id })
             newUser= {...user._doc, events}
-           console.log(newUser);
             return newUser
 
         }))

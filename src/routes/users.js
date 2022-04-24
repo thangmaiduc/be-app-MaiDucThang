@@ -1,4 +1,6 @@
 const router = require("express").Router();
+const {validate} = require('../middleware/validation')
+
 const {
   registerEvent,
   unsubscribingAccount,
@@ -8,7 +10,7 @@ const {
 const { authUser, authRole } = require("../middleware/auth");
 
 //register
-router.post("/register", registerEvent);
+router.post("/register",validate.validateRegister(), registerEvent);
 router.get("/list-event", authUser, authRole("admin"), getEventRegisted);
 router.post("/unsubscribe/:id", unsubscribingAccount);
 router.patch("/:id", authUser, authRole("admin"), editInfoUser);
