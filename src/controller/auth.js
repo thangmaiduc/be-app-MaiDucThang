@@ -20,10 +20,8 @@ const login = async (req, res, next) => {
     }
     const token = jwt.sign(
       {  role: user.role },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "3 days",
-      }
+      process.env.JWT_SECRET
+      
     );
     res.setHeader("authToken", token);
     res.status(200).json({  token });
